@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.util;
-
+/*
+ * вспомагательный метод меин который дает список который мы видим на клиенте и передает мотоду getFilteredWithExceeded
+ */
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
 
@@ -8,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -26,17 +29,22 @@ public class MealsUtil {
 
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
 
-    public static List<MealWithExceed> getWithExceeded(List<Meal> meals, int caloriesPerDay) {
+    public static List<MealWithExceed> getWithExceeded(Collection<Meal> meals, int caloriesPerDay) {
         return getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
     }
 
-    public static List<MealWithExceed> getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+    public static List<MealWithExceed> getFilteredWithExceeded(Collection<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
+        // реализация через Stream API
+        // дефолтный метод в интерфейсе Collection, stream() как холдер на коллекцией
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
                 .collect(
                         Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
-//                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
+                        // принимает элемент коллекции и групирует по ключу - по дате и суммируем калории
+//                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum) // Meal::getCalories - метод референс который заменяет лямбду
                 );
-
+        // filter - фильтруем коллекцию по времени
+        // map - преобразовуем к результату
+        // collect(toList()) - из стрима переводим в лист
         return meals.stream()
                 .filter(meal -> DateTimeUtil.isBetween(meal.getTime(), startTime, endTime))
                 .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
@@ -44,7 +52,7 @@ public class MealsUtil {
     }
 
     private static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
-        return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
+        return new MealWithExceed(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
     }
 
 /*
@@ -52,6 +60,7 @@ public class MealsUtil {
 
         final Map<LocalDate, Integer> caloriesSumByDate = new HashMap<>();
         meals.forEach(meal -> caloriesSumByDate.merge(meal.getDate(), meal.getCalories(), Integer::sum));
+        // forEach дефолтный метод который добавился к интерфейсу Iterable, в параметры принимает функциональный интерфейс Consumer
 
         final List<MealWithExceed> mealsWithExceeded = new ArrayList<>();
         meals.forEach(meal -> {
