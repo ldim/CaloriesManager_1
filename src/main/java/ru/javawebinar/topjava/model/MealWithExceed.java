@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava.model;
-/*
- * bin который будет передаваться на клиента и у которого есть поле exceed которое показывает превышает ли сумма калорий в день за одно значение
- */
+
 import java.time.LocalDateTime;
 
 public class MealWithExceed {

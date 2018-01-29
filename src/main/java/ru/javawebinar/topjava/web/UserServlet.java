@@ -17,7 +17,5 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("forward to users");
         request.getRequestDispatcher("/users.jsp").forward(request, response);
-        //        request.getRequestDispatcher("/users.jsp").forward(request, response);  // берем request и пренаправляем его в forward и он на /users.jsp
-        //response.sendRedirect("users.jsp");  // через Redirect запрос проходит через браузер, а при forward запрос оброб на сервере
     }
 }

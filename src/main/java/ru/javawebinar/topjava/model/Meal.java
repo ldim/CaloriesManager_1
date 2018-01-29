@@ -1,7 +1,5 @@
 package ru.javawebinar.topjava.model;
-/*
- * bin который хранит еду пользователя
- */
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
