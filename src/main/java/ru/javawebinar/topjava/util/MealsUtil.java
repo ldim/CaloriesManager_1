@@ -1,4 +1,7 @@
 package ru.javawebinar.topjava.util;
+/**
+ * вспомагательный метод меин который дает список который мы видим на клиенте и передает мотоду getFilteredWithExceeded
+ */
 
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealWithExceed;
@@ -26,24 +29,24 @@ public class MealsUtil {
                 new Meal(LocalDateTime.of(2015, Month.MAY, 31, 20, 0), "Ужин", 510)
         );
         List<MealWithExceed> mealsWithExceeded = getFilteredWithExceeded(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
-        mealsWithExceeded.forEach(System.out::println);
+        mealsWithExceeded.forEach(System.out::println);  // forEach дефолтный метод который добавился к интерфейсу Iterable, в параметры принимает функциональный интерфейс Consumer
 
         System.out.println(getFilteredWithExceededByCycle(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
         System.out.println(getFilteredWithExceededInOnePass(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
         System.out.println(getFilteredWithExceededInOnePass2(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
 
-    public static List<MealWithExceed> getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
-                .collect(
-                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))
-//                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)
+    public static List<MealWithExceed> getFilteredWithExceeded(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {  // реализация через Stream API
+        Map<LocalDate, Integer> caloriesSumByDate = meals.stream() // дефолтный метод в интерфейсе Collection, stream() как холдер на коллекцией
+                .collect(  // терминальная операция которая преобразует stream в нечто другое
+                        Collectors.groupingBy(Meal::getDate, Collectors.summingInt(Meal::getCalories))  // принимает элемент коллекции и групирует по ключу - по дате и суммируем калории
+//                      Collectors.toMap(Meal::getDate, Meal::getCalories, Integer::sum)   // Meal::getCalories - метод референс который заменяет лямбду
                 );
 
         return meals.stream()
-                .filter(meal -> TimeUtil.isBetween(meal.getTime(), startTime, endTime))
-                .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
-                .collect(toList());
+                .filter(meal -> TimeUtil.isBetween(meal.getTime(), startTime, endTime))  // фильтруем коллекцию по времени
+                .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay)) // преобразовуем к результату
+                .collect(toList()); // из стрима переводим в лист
     }
 
     public static List<MealWithExceed> getFilteredWithExceededByCycle(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -105,7 +108,7 @@ public class MealsUtil {
         return values.stream().flatMap(identity()).collect(toList());
     }
 
-    public static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
+    private static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
         return new MealWithExceed(meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
     }
 }
