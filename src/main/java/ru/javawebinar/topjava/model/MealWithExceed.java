@@ -1,12 +1,9 @@
 package ru.javawebinar.topjava.model;
-/**
- * bin который будет передаваться на клиента и у которого есть поле exceed которое показывает превышает ли сумма калорий в день за одно значение
- */
 
 import java.time.LocalDateTime;
 
 public class MealWithExceed {
-    private final LocalDateTime dateTime; // хранится время без тайм зоны, составной класс из LocalTime и DateTime
+    private final LocalDateTime dateTime;
 
     private final String description;
 
@@ -19,22 +16,6 @@ public class MealWithExceed {
         this.description = description;
         this.calories = calories;
         this.exceed = exceed;
-    }
-
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getCalories() {
-        return calories;
-    }
-
-    public boolean isExceed() {
-        return exceed;
     }
 
     @Override
