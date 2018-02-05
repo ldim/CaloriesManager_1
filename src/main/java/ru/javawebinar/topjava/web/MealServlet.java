@@ -65,8 +65,10 @@ public class MealServlet extends HttpServlet {
             case "all":
             default:
                 log.info("getAll");
+                // кладем в атрибут запрос с именем "meals"
                 request.setAttribute("meals",
                         MealsUtil.getWithExceeded(repository.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                // и форвардим на "/meals.jsp" для адрессовки
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }

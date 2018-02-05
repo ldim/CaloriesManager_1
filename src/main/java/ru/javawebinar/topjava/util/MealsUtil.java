@@ -26,7 +26,7 @@ public class MealsUtil {
     );
 
     public static final int DEFAULT_CALORIES_PER_DAY = 2000;
-
+    // вспомагательный метод getWithExceeded который вызывает и подает туда мин и мах время чтобы там не происходило фильтрации
     public static List<MealWithExceed> getWithExceeded(Collection<Meal> meals, int caloriesPerDay) {
         return getFilteredWithExceeded(meals, LocalTime.MIN, LocalTime.MAX, caloriesPerDay);
     }
@@ -43,7 +43,7 @@ public class MealsUtil {
                 .map(meal -> createWithExceed(meal, caloriesSumByDate.get(meal.getDate()) > caloriesPerDay))
                 .collect(toList());
     }
-
+    // фактори метод createWithExceed который из Meal делает MealWithExceed
     private static MealWithExceed createWithExceed(Meal meal, boolean exceeded) {
         return new MealWithExceed(meal.getId(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), exceeded);
     }
