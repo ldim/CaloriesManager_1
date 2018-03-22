@@ -4,11 +4,11 @@
 		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
 
-    <display-name>Topjava</display-name>
+    <display-name>CaloriesManager</display-name>
 
     <servlet>
         <servlet-name>userServlet</servlet-name>
-        <servlet-class>ru.javawebinar.topjava.web.UserServlet</servlet-class>
+        <servlet-class>com.javaproject.caloriesmanager.web.UserServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
@@ -18,7 +18,7 @@
 
     <servlet>
         <servlet-name>mealServlet</servlet-name>
-        <servlet-class>ru.javawebinar.topjava.web.MealServlet</servlet-class>
+        <servlet-class>com.javaproject.caloriesmanager.web.MealServlet</servlet-class>
         <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
